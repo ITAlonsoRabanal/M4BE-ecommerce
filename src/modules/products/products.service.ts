@@ -1,14 +1,12 @@
-import { BadRequestException, Inject, Injectable, NotFoundException, OnModuleInit } from "@nestjs/common";
+import { BadRequestException, Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { Product } from "src/common/entities/products.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CategoriesService } from "../categories/categories.service";
-import { ProductsRepository } from "./products.repository";
-import { IProduct } from "src/common/interfaces/product.interface";
 import ProductsSeed from "../../common/helpers/ProductSeed"
 import { plainToInstance } from "class-transformer";
 import { isUUID, validate } from "class-validator";
-import { CreateProductDto } from "src/common/dtos/product.dto";
+import { CreateProductDto, UpdateProductDto } from "src/common/dtos/product.dto";
 
 
 @Injectable()
@@ -95,13 +93,7 @@ export class ProductsService {
         return newProduct;
     }
 
-    async updateProduct(id: string, updatedProduct: CreateProductDto) {
-        const productInstance = plainToInstance(CreateProductDto, updatedProduct); 
-        const errors = await validate(productInstance);
-
-        if (errors.length > 0) {
-            throw new BadRequestException('Datos inválidos para el producto.');
-        }
+    async updateProduct(id: string, updatedProduct: UpdateProductDto) {
 
         const product = await this.productRepository.findOne({ where: { id } });
 
@@ -112,18 +104,20 @@ export class ProductsService {
         const categories = await this.categoriesService.getCategories(); 
 
         let productDB = {}
-
-        const category = categories.find((category) => category.id === product.category.id);
+        if(updatedProduct.category) {
+            const category = categories.find((category) => category.name === updatedProduct.category);
             if (category) {
-                productDB = {...productInstance, category: category}
+                productDB = {...updatedProduct, category: category}
             } else throw new BadRequestException('La categoría no existe');
-
-        const updated = await this.productRepository.save({
+        } else {
+            productDB = {...updatedProduct, category: product.category}
+        }
+        await this.productRepository.save({
             ...product,
             ...productDB
         });
-
-        return updated;
+            // Hago la consulta otra vez para retornar todo el objeto
+        return await this.productRepository.findOne({ where: { id }, relations: ['category']});;
     }
     
     async deleteProduct(id: string) {

@@ -1,8 +1,10 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, ParseUUIDPipe, Post, Put, Query, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, Param, ParseUUIDPipe, Put, Query, UseGuards } from "@nestjs/common";
 import { UsersService } from "./users.service";
-import { IUser } from "src/common/interfaces/users.interface";
-import { AuthGuard } from "../auth/auth.guard";
-import { CreateUserDto, UpdateUserDto } from "src/common/dtos/user.dto";
+import { AuthGuard } from "../../common/guards/auth.guard";
+import { UpdateUserDto } from "src/common/dtos/user.dto";
+import { Roles } from "src/common/decorators/roles.decorator";
+import { Role } from "src/common/interfaces/roles.enum";
+import { RolesGuard } from "src/common/guards/roles.guard";
 
 @Controller("users")
 
@@ -10,7 +12,8 @@ export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
     @Get()
-    @UseGuards(AuthGuard)
+    @Roles(Role.Admin)
+    @UseGuards(AuthGuard, RolesGuard)
     @HttpCode(200)
     getUsers(
         @Query('page') page: number = 1,
@@ -23,12 +26,6 @@ export class UsersController {
     @UseGuards(AuthGuard)
     getUserById(@Param("id", ParseUUIDPipe) id: string) {        
         return this.usersService.getUserById(id)
-    }
-
-    @Post() 
-    @HttpCode(201)
-    createUser(@Body() user: CreateUserDto) {
-        return this.usersService.createUser(user);
     }
 
     @Put(":id")

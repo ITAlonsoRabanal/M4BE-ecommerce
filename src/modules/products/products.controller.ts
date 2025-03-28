@@ -1,8 +1,11 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, ParseUUIDPipe, Post, Put, Query, UseGuards } from "@nestjs/common";
 import { ProductsService } from "./products.service";
 import { IProduct } from "src/common/interfaces/product.interface";
-import { AuthGuard } from "../auth/auth.guard";
-import { CreateProductDto } from "src/common/dtos/product.dto";
+import { AuthGuard } from "../../common/guards/auth.guard";
+import { CreateProductDto, UpdateProductDto } from "src/common/dtos/product.dto";
+import { Roles } from "src/common/decorators/roles.decorator";
+import { RolesGuard } from "src/common/guards/roles.guard";
+import { Role } from "src/common/interfaces/roles.enum";
 
 @Controller("products")
 
@@ -30,8 +33,9 @@ export class ProductsController {
     }
 
     @Put(":id")
-    @UseGuards(AuthGuard)
-    updateProduct(@Param("id", ParseUUIDPipe) id: string, @Body() product: CreateProductDto) {
+    @Roles(Role.Admin)
+    @UseGuards(AuthGuard, RolesGuard)
+    updateProduct(@Param("id", ParseUUIDPipe) id: string, @Body() product: UpdateProductDto) {
         return this.ProductsService.updateProduct(id, product)
     } 
 

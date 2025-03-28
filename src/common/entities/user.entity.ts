@@ -12,7 +12,7 @@ export class User {
   @Column({ type: 'varchar', length: 50, unique: true, nullable: false })
   email: string;
 
-  @Column({ type: 'varchar', length: 20, nullable: false })
+  @Column({ type: 'varchar', length: 150, nullable: false })
   password: string;
 
   @Column({ type: 'bigint', nullable: true })
@@ -24,8 +24,11 @@ export class User {
   @Column({ type: 'text', nullable: true })
   address: string;
 
-  @Column({ type: 'varchar', length: 50, nullable: true })
+  @Column({ type: 'varchar', length: 50, nullable: true }) 
   city: string;
+
+  @Column({ default: false })
+  isAdmin: boolean
 
   @OneToMany(() => Order, (order) => order.user)
   orders: Order[];

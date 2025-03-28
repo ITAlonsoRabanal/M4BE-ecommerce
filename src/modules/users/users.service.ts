@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { User } from "src/common/entities/user.entity";
 import { IUser } from "src/common/interfaces/users.interface";
-import { CreateUserDto, UpdateUserDto } from "src/common/dtos/user.dto";
+import { UpdateUserDto, RegisterUserDto } from "src/common/dtos/user.dto";
 import { isUUID } from "class-validator";
 
 @Injectable()
@@ -39,14 +39,23 @@ export class UsersService {
         return user;
     }
 
-    async createUser(userData: CreateUserDto) {
+    async getUserByEmail(email: string) {
+        return this.userRepository.findOneBy({email})
+    }
+
+    async createUser(userData: RegisterUserDto) {
+
+        
         const existinMail = await this.userRepository.findOne({
             where: { email: userData.email },
         });
         if (existinMail) {
             throw new BadRequestException(`Ese email ya está en uso`);
         }
-        const newUser = this.userRepository.create(userData);
+
+        const {confirmPassword, ...userDto} = userData
+
+        const newUser = this.userRepository.create(userDto);
         return await this.userRepository.save(newUser);
     }
 

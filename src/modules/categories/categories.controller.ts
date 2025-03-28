@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
 import { CategoriesService } from "./categories.service";
-import { AuthGuard } from "../auth/auth.guard";
+import { AuthGuard } from "../../common/guards/auth.guard";
 import { AddCategoriesDto } from "src/common/dtos/categories.dto";
 
 @Controller("categories")

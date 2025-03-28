@@ -13,6 +13,8 @@ import { Category } from './common/entities/categories.entity';
 import { Product } from './common/entities/products.entity';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { OrdersModule } from './modules/orders/orders.module';
+import { FilesModule } from './modules/file-upload/file.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
     imports: [
@@ -36,9 +38,15 @@ import { OrdersModule } from './modules/orders/orders.module';
         ProductsModule, 
         CategoriesModule,
         OrdersModule,
-        AuthModule
+        AuthModule,
+        FilesModule,
+        JwtModule.register({
+            global: true,
+            signOptions: {expiresIn: '1h'},
+            secret: process.env.JWT_SECRET
+        })
     ],
-    controllers: [CategoriesController],
+    controllers: [],
     providers: [],
 })
 export class AppModule {
