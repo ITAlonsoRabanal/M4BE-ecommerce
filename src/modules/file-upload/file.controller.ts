@@ -4,7 +4,9 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { UpdateProductDto } from "src/common/dtos/product.dto";
 import { ProductsService } from "../products/products.service";
 import { AuthGuard } from "../../common/guards/auth.guard";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
+@ApiTags('Files')
 @Controller('files')
 
 export class FilesController {
@@ -12,6 +14,7 @@ export class FilesController {
         private readonly productService: ProductsService
     ) {}
 
+    @ApiBearerAuth()
     @Post('uploadImage/:id')
     @UseGuards(AuthGuard)
     @UseInterceptors(FileInterceptor('file'))

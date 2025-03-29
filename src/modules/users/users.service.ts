@@ -2,7 +2,6 @@ import { BadRequestException, Injectable, NotFoundException } from "@nestjs/comm
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { User } from "src/common/entities/user.entity";
-import { IUser } from "src/common/interfaces/users.interface";
 import { UpdateUserDto, RegisterUserDto } from "src/common/dtos/user.dto";
 import { isUUID } from "class-validator";
 

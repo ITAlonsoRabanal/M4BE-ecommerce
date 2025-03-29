@@ -2,7 +2,9 @@ import { Body, Controller, Get, Param, ParseUUIDPipe, Post, UseGuards } from "@n
 import { OrdersService } from "./orders.service";
 import { addOrderDto } from "src/common/dtos/order.dto";
 import { AuthGuard } from "../../common/guards/auth.guard";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags('Orders')
 @Controller("orders")
 
 export class OrdersController {

@@ -2,7 +2,9 @@ import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
 import { CategoriesService } from "./categories.service";
 import { AuthGuard } from "../../common/guards/auth.guard";
 import { AddCategoriesDto } from "src/common/dtos/categories.dto";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
+@ApiTags('Categories')
 @Controller("categories")
 
 export class CategoriesController {
@@ -14,12 +16,14 @@ export class CategoriesController {
         return this.CategoriesService.getCategories()
     }
 
+    @ApiBearerAuth()
     @Post()
     @UseGuards(AuthGuard)
     addCategories(@Body() categories: AddCategoriesDto[]) {
         return this.CategoriesService.addCategories(categories)
     }
 
+    @ApiBearerAuth()
     @Post("seeder")
     @UseGuards(AuthGuard)
     categoriesSeeder() {
