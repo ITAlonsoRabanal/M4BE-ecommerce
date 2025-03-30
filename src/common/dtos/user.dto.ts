@@ -89,7 +89,7 @@ export class RegisterUserDto {
     address: string;
 
     /**
-     * default: false, no need to include it in request body
+     * false for default, no need to include it in request body
      * @example false
      */
     @IsOptional()

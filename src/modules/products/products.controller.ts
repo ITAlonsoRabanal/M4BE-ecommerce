@@ -5,7 +5,7 @@ import { CreateProductDto, UpdateProductDto } from "src/common/dtos/product.dto"
 import { Roles } from "src/common/decorators/roles.decorator";
 import { RolesGuard } from "src/common/guards/roles.guard";
 import { Role } from "src/common/interfaces/roles.enum";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiQuery, ApiTags } from "@nestjs/swagger";
 
 @ApiTags('Products')
 @Controller("products")
@@ -15,11 +15,13 @@ export class ProductsController {
 
     @Get()
     @HttpCode(200)
+    @ApiQuery({ name: 'page', required: false, type: Number }) 
+    @ApiQuery({ name: 'limit', required: false, type: Number }) 
     getProducts(
         @Query('page') page: number = 1,
         @Query('limit') limit: number = 5,
     ) {
-        return this.ProductsService.getProducts(page, limit);
+        return this.ProductsService.getProducts(Number(page), Number(limit));
     }
 
     @Get(":id")

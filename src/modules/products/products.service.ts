@@ -21,7 +21,7 @@ export class ProductsService {
     ) {}
 
     async getProducts(page?: number, limit?: number) {
-        if(!limit || !page) {
+        if(!limit || !page)  {
             const products = await this.productRepository.find({
                 relations: ['category', 'orderDetails'],
             });     // El metodo findAndCount omite relaciones. Busco y cuento por separado

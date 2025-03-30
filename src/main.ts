@@ -18,7 +18,7 @@ async function bootstrap() {
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('e-commerce API')
-    .setDescription('API para el e-commerce.')
+    .setDescription('Welcome to my personal api project. My name is Ignacio Alonso, I made this app on NestJS.')
     .setVersion('1.0')
     .addBearerAuth()
     .setExternalDoc('LinkedIn Profile', 'https://www.linkedin.com/in/ignacio-alonso-5680872b4/')

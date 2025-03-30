@@ -8,11 +8,11 @@ export class addOrderDto {
 
     @IsArray()
     @ArrayNotEmpty()
-    products: Product[]
+    products: IdProduct[]
     
 }
 
-class Product {
+class IdProduct {
     @IsUUID()
     id: string
 }
