@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   nestapp:
+    image: italonsorabanal/m4beecommerce:latest
     build: ./
     ports: 
       - "3001:3000"

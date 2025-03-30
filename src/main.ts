@@ -3,25 +3,32 @@ import { AppModule } from './app.module';
 import { globalMiddleware } from './common/middlewares/global.middleware';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { auth } from 'express-openid-connect';
+import { config as auth0config } from './config/auth0.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.use(auth(auth0config));
+
   app.use(globalMiddleware);
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true
-  }))
+  }));
 
   const swaggerConfig = new DocumentBuilder()
-  .setTitle(`Demo nest`)
-  .setDescription(`Api construida con Nest para demostracion. Fines educativos y practica`)
-  .setVersion('1.0')
-  .addBearerAuth()
-  .build()
+    .setTitle('e-commerce API')
+    .setDescription('API para el e-commerce.')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .setExternalDoc('LinkedIn Profile', 'https://www.linkedin.com/in/ignacio-alonso-5680872b4/')
+    .build();
 
-  // Continuar documentando los dtos
-  const document = SwaggerModule.createDocument(app, swaggerConfig)
-  SwaggerModule.setup('api', app, document)
+  // Continuar documentando los DTOs
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('api', app, document);
 
   await app.listen(process.env.PORT ?? 3000);
 }
+
 bootstrap();
