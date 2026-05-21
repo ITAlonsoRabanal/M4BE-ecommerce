@@ -13,7 +13,7 @@ export default registerAs('typeorm', () => ({
   migrations: ['dist/migrations/*{.ts,.js}'],
   autoLoadEntities: true,
   dropSchema: false,
-  synchronize: false,
+  synchronize: true,
   logging: false,
   ssl: process.env.DB_SSL === 'true',
 }) as DataSourceOptions);
